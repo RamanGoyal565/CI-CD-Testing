@@ -1,0 +1,9 @@
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\HttpClientAPI.exe
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\appsettings.Development.json
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\appsettings.json
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\HttpClientAPI.dll
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\HttpClientAPI.deps.json
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\HttpClientAPI.runtimeconfig.json
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\HttpClientAPI.pdb
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\Microsoft.AspNetCore.OpenApi.dll
+D:\Capgemini\WebAPi\HttpClientAPI\obj\Release\net10.0\PubTmp\Out\Microsoft.OpenApi.dll
