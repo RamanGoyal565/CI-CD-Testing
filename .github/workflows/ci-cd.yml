@@ -51,16 +51,16 @@ jobs:
 
     # 🚀 Deploy to IIS
     - name: Deploy to IIS
-  shell: powershell
-  run: |
-    Import-Module WebAdministration
-
-    Stop-WebAppPool -Name "MyDotnetAppPool"
-
-    Copy-Item -Path "C:\deploy\app\*" `
-              -Destination "C:\inetpub\wwwroot\MyDotnetApp" `
-              -Recurse -Force
-
-    Start-WebAppPool -Name "MyDotnetAppPool"
+      shell: powershell
+      run: |
+        Import-Module WebAdministration
+    
+        Stop-WebAppPool -Name "MyDotnetAppPool"
+    
+        Copy-Item -Path "C:\deploy\app\*" `
+                  -Destination "C:\inetpub\wwwroot\MyDotnetApp" `
+                  -Recurse -Force
+    
+        Start-WebAppPool -Name "MyDotnetAppPool"
 
         Write-Host "Deployment completed!"
