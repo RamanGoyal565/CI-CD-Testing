@@ -1,0 +1,60 @@
+name: .NET CI/CD with SonarQube & IIS
+
+on:
+  push:
+    branches: [ "main" ]
+
+jobs:
+  build:
+    runs-on: self-hosted
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+
+    - name: Setup .NET
+      uses: actions/setup-dotnet@v4
+      with:
+        dotnet-version: '8.0.x'
+
+    - name: Install SonarScanner
+      run: dotnet tool install --global dotnet-sonarscanner
+
+    - name: Add tools to PATH
+      run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
+
+    - name: SonarQube Begin
+      run: |
+        dotnet sonarscanner begin `
+        /k:"my-dotnet-app" `
+        /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
+        /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
+        /d:sonar.qualitygate.wait=true
+
+    - name: Restore
+      run: dotnet restore
+
+    - name: Build
+      run: dotnet build --configuration Release
+
+    - name: Test
+      run: dotnet test
+
+    - name: SonarQube End
+      run: |
+        dotnet sonarscanner end `
+        /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+
+    - name: Publish
+      run: dotnet publish -c Release -o C:\deploy\app
+
+    - name: Deploy to IIS
+      shell: powershell
+      run: |
+        Stop-WebAppPool -Name "MyDotnetAppPool"
+
+        Copy-Item -Path "C:\deploy\app\*" `
+                  -Destination "C:\inetpub\wwwroot\MyDotnetApp" `
+                  -Recurse -Force
+
+        Start-WebAppPool -Name "MyDotnetAppPool"
