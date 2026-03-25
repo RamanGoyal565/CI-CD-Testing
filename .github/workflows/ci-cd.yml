@@ -55,12 +55,12 @@ jobs:
       run: |
         Import-Module WebAdministration
     
-        Stop-WebAppPool -Name "MyDotnetAppPool"
+        Stop-WebAppPool -Name "MyDotnetApp"
     
         Copy-Item -Path "C:\deploy\app\*" `
                   -Destination "C:\inetpub\wwwroot\MyDotnetApp" `
                   -Recurse -Force
     
-        Start-WebAppPool -Name "MyDotnetAppPool"
+        Start-WebAppPool -Name "MyDotnetApp"
 
         Write-Host "Deployment completed!"
