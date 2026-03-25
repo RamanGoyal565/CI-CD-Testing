@@ -9,47 +9,59 @@ jobs:
     runs-on: self-hosted
 
     steps:
+    # 📥 Checkout code
     - name: Checkout code
       uses: actions/checkout@v4
 
-    - name: Install SonarScanner
-      run: dotnet tool install --global dotnet-sonarscanner
+    # 🔍 Verify .NET is available
+    - name: Check .NET version
+      run: dotnet --version
 
-    - name: Add tools to PATH
+    # 🔧 Install/Update SonarScanner
+    - name: Install SonarScanner
+      run: dotnet tool update --global dotnet-sonarscanner
+
+    # ➕ Add tool path
+    - name: Add .NET tools to PATH
       run: echo "$env:USERPROFILE\.dotnet\tools" >> $env:GITHUB_PATH
 
+    # 🔍 Start SonarQube Analysis
     - name: SonarQube Begin
-      run: |
-        dotnet sonarscanner begin `
-        /k:"my-dotnet-app" `
-        /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" `
-        /d:sonar.token="${{ secrets.SONAR_TOKEN }}" `
-        /d:sonar.qualitygate.wait=true
+      run: dotnet sonarscanner begin /k:"my-dotnet-app" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.qualitygate.wait=true
 
+    # 📦 Restore dependencies
     - name: Restore
       run: dotnet restore
 
+    # 🛠 Build project
     - name: Build
       run: dotnet build --configuration Release
 
+    # 🧪 Run tests
     - name: Test
       run: dotnet test
 
+    # 🔍 End SonarQube Analysis
     - name: SonarQube End
-      run: |
-        dotnet sonarscanner end `
-        /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
+      run: dotnet sonarscanner end /d:sonar.token="${{ secrets.SONAR_TOKEN }}"
 
+    # 📦 Publish app
     - name: Publish
       run: dotnet publish -c Release -o C:\deploy\app
 
+    # 🚀 Deploy to IIS
     - name: Deploy to IIS
       shell: powershell
       run: |
+        Write-Host "Stopping App Pool..."
         Stop-WebAppPool -Name "MyDotnetAppPool"
 
+        Write-Host "Copying files..."
         Copy-Item -Path "C:\deploy\app\*" `
                   -Destination "C:\inetpub\wwwroot\MyDotnetApp" `
                   -Recurse -Force
 
+        Write-Host "Starting App Pool..."
         Start-WebAppPool -Name "MyDotnetAppPool"
+
+        Write-Host "Deployment completed!"
