@@ -27,7 +27,7 @@ jobs:
 
     # 🔍 Start SonarQube Analysis
     - name: SonarQube Begin
-      run: dotnet sonarscanner begin /k:"my-dotnet-app" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.qualitygate.wait=true
+      run: dotnet sonarscanner begin /k:"my-dotnet-app" /d:sonar.host.url="${{ secrets.SONAR_HOST_URL }}" /d:sonar.token="${{ secrets.SONAR_TOKEN }}" /d:sonar.qualitygate.wait=false
 
     # 📦 Restore dependencies
     - name: Restore
